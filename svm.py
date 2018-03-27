@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import LoadCSV
 import preprocessing as pp
+from sklearn.preprocessing import MinMaxScaler
 import sys
 
 def getData(values) :
@@ -12,8 +13,6 @@ def getData(values) :
         values[i] = np.delete(values[i],len(values[i])-1,0)
     values,nbdata = pp.getLinear(values)
     return values
-
-
 
 def trainSVM(svm,train,expTrain):
     support = [[1,2,3,4]]
@@ -37,16 +36,16 @@ def predict(svm, array) :
 def showData(svm,check,expcheck):
     array = predict(svm,check[len(check)-1])
     dates = list(range(1, len(array)+1))
-    print (len(array)+1, len(dates))
     plt.plot(dates, array, color='cornflowerblue', lw=2, label='Polynomial model')
     plt.plot(dates, expcheck[len(check)-1], color='darkorange', label='data')
+    plt.show()
 
 if __name__ == "__main__":
     svr_rbf = SVR(kernel='rbf', C=1e3,gamma=0.1,epsilon=0.01 ,degree=15,cache_size=1000,verbose=True)
     svr_sig = SVR(kernel='sigmoid', C=0.5,epsilon=0.01 ,degree=15,cache_size=1000,verbose=True)
     svr_poly = SVR(kernel='poly', C=1e3,epsilon=0.01 ,degree=5,cache_size=1000,verbose=True)
-    print (svr_sig)
-    values = getData()
+    data = LoadCSV.read("GAS.CMDUSD_Candlestick_1_m_BID_20.11.2015-18.11.2017.csv")
+    values = getData(data)
     train,expTrain,check,expcheck = pp.setSvmValues(values)
     
     #svr_poly.support_vectors_ = trainSVM(svr_poly,train,expTrain)
@@ -55,10 +54,8 @@ if __name__ == "__main__":
     #vectors = trainSVM(svr_sig,train,expTrain)
     #print(vectors)
     #print(svr_sig.support_vectors_)
-    sys.stdout.flush()
     #svr_sig.support_vectors_ = vectors
     #print(svr_sig.support_vectors_)
-    sys.stdout.flush()
     '''svr_sig = svr_sig.fit(train[len(train)-1], expTrain[len(train)-1])
     print (svr_sig.support_vectors_, "stuff")'''
     
@@ -83,7 +80,7 @@ if __name__ == "__main__":
     plt.show()'''
 
 def support_vectors_regression(data,kernel="rbf") :
-    if (kernel == "rbf")
+    if (kernel == "rbf") :
         svm = SVR(kernel='rbf', C=1e3,gamma=0.1,epsilon=0.01 ,degree=15,cache_size=1000,verbose=True)
     elif (kernel == "poly") :
         svm = SVR(kernel='poly', C=1e3,gamma=0.1,epsilon=0.01 ,degree=15,cache_size=1000,verbose=True)

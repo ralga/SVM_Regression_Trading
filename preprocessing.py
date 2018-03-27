@@ -1,3 +1,5 @@
+from sklearn.preprocessing import MinMaxScaler
+import numpy as np
 
 def getLinear(values) :
     i = 0
